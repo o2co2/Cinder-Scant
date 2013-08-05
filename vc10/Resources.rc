@@ -1,0 +1,8 @@
+#include "../include/Resources.h"
+
+ICON
+UI_FONT
+ICON_W
+ICON_V
+ICON_C
+ICON_S
