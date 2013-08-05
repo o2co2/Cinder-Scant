@@ -5,7 +5,7 @@
 
 struct Config{
 	static const int APP_WIDTH = 930;
-	static const int APP_HEIGHT = 650;
+	static const int APP_HEIGHT = 720;
 
 	static const int FPS = 200;
 

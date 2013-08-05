@@ -133,6 +133,7 @@
     <ClInclude Include="..\include\Widget.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\resources\canvas_texture.png" />
     <None Include="..\resources\cinder_app_icon.ico" />
     <None Include="..\resources\Comfortaa-Regular.ttf" />
     <None Include="..\resources\icon_c.png" />

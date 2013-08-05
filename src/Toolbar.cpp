@@ -19,7 +19,7 @@ Toolbar::Toolbar(){
 	createColorButton( 0xE45F3C );
 	createColorButton( 0x665543 );
 	createColorButton( 0x2B6490 );
-	createColorButton( 0x0E807A );
+	createColorButton( 0x268691 );
 
 	colorButtons[0]->setFocused( true );
 	colorChangeSignal( colorButtons[0]->getColor() );

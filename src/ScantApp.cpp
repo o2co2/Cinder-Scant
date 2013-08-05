@@ -60,7 +60,7 @@ class ScantApp : public AppNative {
 
 void ScantApp::prepareSettings( Settings *settings ) {
 	settings->setWindowSize( Config::APP_WIDTH, Config::APP_HEIGHT );
-	settings->setResizable( false );
+	//settings->setResizable( false );
 	settings->setFrameRate( (float)Config::FPS );
 }
 
@@ -225,7 +225,8 @@ void ScantApp::onClearButtonRelease( ) {
 }
 
 void ScantApp::onSaveButtonRelease( ) {
-	Surface s( canvas->getTexture() );
+	Surface s = copyWindowSurface( canvas->getBounds() );
+	//Surface s( canvas->getSnapshot() );
 	fs::path pngPath = getSaveFilePath( getHomeDirectory() );
 	if( !pngPath.empty() ) {
 		writeImage( pngPath, s, ImageTarget::Options(), "png" );

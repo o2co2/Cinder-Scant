@@ -1,8 +1,10 @@
 ﻿#include "cinder/Rand.h"
+#include "cinder/ImageIo.h"
 
 #include "Canvas.h"
 #include "Config.h"
 #include "Utils.h"
+#include "Resources.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -20,6 +22,9 @@ Canvas::Canvas( ci::Vec2f _pos, ci::Vec2f _size ) {
 
 	setLineSize( (float)Config::DEFAULT_LINE_SIZE );
 	setLineVariance( (float)Config::DEFAULT_LINE_VARIANCE );
+
+	canvasTexture = gl::Texture::create( loadImage( loadResource( CANVAS_TEXTURE ) ) );
+	canvasTexture->setWrap( GL_REPEAT, GL_REPEAT );
 
 	saveUndo();
 };
@@ -110,22 +115,25 @@ float Canvas::getLineVariance(){
 	return lineVariance;
 }
 
-gl::Texture Canvas::getTexture(){
-	gl::Texture t = fbo.getTexture();
-	t.setFlipped(true);
-	return t;
-}
+//gl::Texture Canvas::getSnapshot(){
+//	gl::Texture t = fbo.getTexture();
+//	t.setFlipped(true);
+//	return t;
+//}
 
 //*******************************************************************************
 // DRAW
 //*******************************************************************************
 
 void Canvas::draw(){
-	//gl::enableAlphaBlending( true ); // premultiply alpha
 	gl::color(color);
 	gl::draw( fbo.getTexture(), pos );
-	//gl::draw( undoFbo.getTexture(), Area(0,0,200,100) );
-	//gl::disableAlphaBlending();
+
+	// blend canvas texture on top
+	glEnable (GL_BLEND);
+	glBlendFunc( GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA ); 
+	gl::draw( canvasTexture, getBounds() );
+	glDisable(GL_BLEND);
 }
 
 void Canvas::clear(){
@@ -201,7 +209,7 @@ void Canvas::saveUndo(){
 
 	//float kb = ( linesList.size() * sizeof(Line) + sizeof(linesList) ) / 1024.0f;
 	//ci::app::console() << "saveUndo size kb: " << kb << std::endl;
-	ci::app::console() << "save undo steps: " << strokeIndexList.size() << ", lines: " << linesList.size() << std::endl;
+	//ci::app::console() << "save undo steps: " << strokeIndexList.size() << ", lines: " << linesList.size() << std::endl;
 }
 
 void Canvas::undo(){
@@ -226,7 +234,7 @@ void Canvas::undo(){
 		}
 
 	}
-	ci::app::console() << "undo steps: " << strokeIndexList.size() << ", lines: " << linesList.size() << std::endl;
+	//ci::app::console() << "undo steps: " << strokeIndexList.size() << ", lines: " << linesList.size() << std::endl;
 }
 
 void Canvas::clearUndo(){

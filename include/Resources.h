@@ -7,3 +7,4 @@
 #define ICON_V			CINDER_RESOURCE( ../resources/, icon_v.png, 131, IMAGE)
 #define ICON_C			CINDER_RESOURCE( ../resources/, icon_c.png, 132, IMAGE)
 #define ICON_S			CINDER_RESOURCE( ../resources/, icon_s.png, 133, IMAGE)
+#define CANVAS_TEXTURE	CINDER_RESOURCE( ../resources/, canvas_texture.png, 134, IMAGE)

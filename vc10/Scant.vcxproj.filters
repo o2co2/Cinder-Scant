@@ -126,5 +126,8 @@
     <None Include="..\resources\icon_w.png">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\resources\canvas_texture.png">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -37,7 +37,7 @@ class Canvas {
 		void setLineVariance(float value);
 		float getLineVariance();
 
-		ci::gl::Texture getTexture();
+		//ci::gl::Texture getSnapshot();
 
 		void addLine( ci::Vec2f endPos );
 		void addLine( ci::Vec2f startPos, ci::Vec2f endPos );
@@ -51,7 +51,6 @@ class Canvas {
 		void trimUndoLength();
 		void clearFbo( ci::gl::Fbo target );
 
-		ci::Rectf rect;
 		ci::Vec2f size;
 		ci::Vec2f pos;
 		ci::Color color;
@@ -67,6 +66,8 @@ class Canvas {
 		ci::gl::Fbo::Format msaaFormat;
 		ci::gl::Fbo fbo;
 		ci::gl::Fbo undoFbo;
+
+		ci::gl::TextureRef canvasTexture;
 
 		std::deque<Line*> linesList; // Line segments
 		std::deque<unsigned int> strokeIndexList; // Stroke indices
