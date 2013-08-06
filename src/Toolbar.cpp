@@ -26,21 +26,28 @@ Toolbar::Toolbar(){
 
 	gl::TextureRef wTex = gl::Texture::create( loadImage( loadResource( ICON_W ) ) );
 	gl::TextureRef vTex = gl::Texture::create( loadImage( loadResource( ICON_V ) ) );
+	gl::TextureRef mTex = gl::Texture::create( loadImage( loadResource( ICON_M ) ) );
 	gl::TextureRef cTex = gl::Texture::create( loadImage( loadResource( ICON_C ) ) );
 	gl::TextureRef sTex = gl::Texture::create( loadImage( loadResource( ICON_S ) ) );
 
-	lineWidthButton = new ui::RoundValueButton( ci::Vec2f(200.0f, 200.0f), ci::Vec2f(40.0f, 40.0f), wTex, .5f );
+	Vec2f buttonSize = Vec2f((float)Config::BUTTON_SIZE, (float)Config::BUTTON_SIZE);
+
+	lineWidthButton = new ui::RoundValueButton( Vec2f(0,0), buttonSize, wTex, .5f );
 	lineWidthButton->setValue( (float)Config::DEFAULT_LINE_SIZE / ((float)Config::MAX_LINE_SIZE - (float)Config::MIN_LINE_SIZE) );
 	buttons.push_back( lineWidthButton );
 
-	lineVarianceButton = new ui::RoundValueButton( ci::Vec2f(200.0f, 200.0f), ci::Vec2f(40.0f, 40.0f), vTex, .5f );
+	lineVarianceButton = new ui::RoundValueButton( Vec2f(0,0), buttonSize, vTex, .5f );
 	lineVarianceButton->setValue( (float)Config::DEFAULT_LINE_VARIANCE / (float)Config::MAX_LINE_VARIANCE );
 	buttons.push_back( lineVarianceButton );
 
-	clearButton = new ui::RoundIconButton( ci::Vec2f(200.0f, 200.0f), ci::Vec2f(40.0f, 40.0f), cTex );
+	blendMultiplyButton = new ui::RoundIconButton( Vec2f(0,0), buttonSize, mTex );
+	blendMultiplyButton->setToggleable( true );
+	buttons.push_back( blendMultiplyButton );
+
+	clearButton = new ui::RoundIconButton( Vec2f(0,0), buttonSize, cTex );
 	buttons.push_back( clearButton );
 
-	saveButton = new ui::RoundIconButton( ci::Vec2f(200.0f, 200.0f), ci::Vec2f(40.0f, 40.0f), sTex );
+	saveButton = new ui::RoundIconButton( Vec2f(0,0), buttonSize, sTex );
 	buttons.push_back( saveButton );
 }
 

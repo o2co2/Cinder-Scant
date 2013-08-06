@@ -41,16 +41,12 @@ namespace ui{
 	void RoundValueButton::draw(){
 		RoundIconButton::draw(); 
 
-		ci::gl::enableAlphaBlending();
-
 		ci::gl::lineWidth( borderWidth );
-		ci::gl::color( ci::ColorA( arcColor, alpha ) );
+		ci::gl::color( arcColor );
 		ci::gl::pushModelView(); 
 		ci::gl::translate( getPosition() );
 		ci::gl::draw( arcPath );
 		ci::gl::popModelView();
-
-		ci::gl::disableAlphaBlending();
 	}
 
 	void RoundValueButton::setValue(float _value){

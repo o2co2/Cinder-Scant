@@ -6,17 +6,11 @@ namespace ui{
 	Widget::Widget(){
 		setSize( 20.0f, 20.0f );
 		setPosition( 0.0f, 0.0f );
-		setScale( 1.0f );
-		setRotation( 0.0f );
 		color = ci::Color::hex( Config::WIDGET_COLOR );
 		borderColor = ci::Color::hex( Config::WIDGET_BORDER_COLOR );
 		borderOverColor = ci::Color::hex( Config::WIDGET_BORDER_OVER_COLOR );
 		borderDownColor = ci::Color::hex( Config::WIDGET_BORDER_DOWN_COLOR );
 		borderWidth = (float) Config::WIDGET_BORDER_WIDTH;
-		setAlpha( 1.0f );
-		setName("");
-		
-		//ci::app::App::get()->getSignalUpdate().connect( std::bind( &Widget::update, this ) );
 
 		invalidate();
 	}
@@ -76,28 +70,6 @@ namespace ui{
 		return pos;
 	}
 
-	void Widget::setScale(float s){
-		scale = s;
-		invalidate();
-	}
-	float Widget::getScale(){
-		return scale;
-	}
-
-	void Widget::setRotation(float r){
-		rot = r;
-	}
-	float Widget::getRotation(){
-		return rot;
-	}
-
-	void Widget::setAlpha(float a){
-		alpha = ci::math<float>::clamp( a );
-	}
-	float Widget::getAlpha(){
-		return alpha;
-	}
-
 	void Widget::setColor(ci::Color c){
 		color.set( c.r, c.g, c.b );
 	}
@@ -106,12 +78,5 @@ namespace ui{
 	}
 	ci::Color Widget::getColor(){
 		return color;
-	}
-
-	void Widget::setName(std::string n){
-		name = n;
-	}
-	std::string Widget::getName(){
-		return name;
 	}
 }

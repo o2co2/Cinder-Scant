@@ -22,6 +22,7 @@ Canvas::Canvas( ci::Vec2f _pos, ci::Vec2f _size ) {
 
 	setLineSize( (float)Config::DEFAULT_LINE_SIZE );
 	setLineVariance( (float)Config::DEFAULT_LINE_VARIANCE );
+	setLineBlendMode( LINE_BLEND_NORMAL );
 
 	canvasTexture = gl::Texture::create( loadImage( loadResource( CANVAS_TEXTURE ) ) );
 	canvasTexture->setWrap( GL_REPEAT, GL_REPEAT );
@@ -51,6 +52,7 @@ void Canvas::initFbos() {
 
 	undoFbo = gl::Fbo( (int)size.x, (int)size.y, msaaFormat );
 	undoFbo.getTexture().setFlipped(true);
+	clearFbo( undoFbo );
 }
 
 Area Canvas::getBounds(){
@@ -115,11 +117,12 @@ float Canvas::getLineVariance(){
 	return lineVariance;
 }
 
-//gl::Texture Canvas::getSnapshot(){
-//	gl::Texture t = fbo.getTexture();
-//	t.setFlipped(true);
-//	return t;
-//}
+void Canvas::setLineBlendMode(LineBlendMode bm){
+	lineBlendMode = bm;
+}
+LineBlendMode Canvas::getLineBlendMode(){
+	return lineBlendMode;
+}
 
 //*******************************************************************************
 // DRAW
@@ -134,6 +137,8 @@ void Canvas::draw(){
 	glBlendFunc( GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA ); 
 	gl::draw( canvasTexture, getBounds() );
 	glDisable(GL_BLEND);
+
+	//gl::draw( undoFbo.getTexture(), Area(0,0,200,100) ); //visualize undofbo
 }
 
 void Canvas::clear(){
@@ -158,6 +163,7 @@ void Canvas::addLine( Vec2f startPos, Vec2f endPos ){
 	line->startPos = Vec2f( startPos.x-pos.x, startPos.y-yOffset ); //include positon offset
 	line->endPos = Vec2f( endPos.x-pos.x, endPos.y-yOffset ); //include positon offset
 	line->color = lineColor;
+	line->blendMode = lineBlendMode;
 
 	float v = lineVariance * lineSize;
 	float variance = randFloat( 0, v ) - v/2;
@@ -170,6 +176,11 @@ void Canvas::addLine( Vec2f startPos, Vec2f endPos ){
 
 void Canvas::drawLineToFbo( gl::Fbo fbo, Line* line){
 	fbo.bindFramebuffer();
+
+	if( line->blendMode == LINE_BLEND_MULTIPLY ){
+		glEnable (GL_BLEND);
+		glBlendEquation(GL_MIN);
+	}
 
 	gl::color( line->color );
 
@@ -194,6 +205,11 @@ void Canvas::drawLineToFbo( gl::Fbo fbo, Line* line){
 	gl::drawSolidCircle( line->startPos, radius );
 	gl::drawSolidCircle( line->endPos, radius );
 
+	if( line->blendMode == LINE_BLEND_MULTIPLY ){
+		glBlendEquation(GL_FUNC_ADD);
+		glDisable(GL_BLEND);
+	}
+
 	fbo.unbindFramebuffer();
 }
 
@@ -204,36 +220,40 @@ void Canvas::drawLineToFbo( gl::Fbo fbo, Line* line){
 
 void Canvas::saveUndo(){
 	strokeIndexList.push_back( linesList.size() );
-
 	trimUndoLength();
 
-	//float kb = ( linesList.size() * sizeof(Line) + sizeof(linesList) ) / 1024.0f;
-	//ci::app::console() << "saveUndo size kb: " << kb << std::endl;
-	//ci::app::console() << "save undo steps: " << strokeIndexList.size() << ", lines: " << linesList.size() << std::endl;
+	//ci::app::console() << "undo steps: " << strokeIndexList.size() << ", lines: " << linesList.size() << std::endl;
 }
 
 void Canvas::undo(){
+
+	unsigned int strokeIndex = 0;
+
 	if( strokeIndexList.size() > 0 ){
-
-		unsigned int strokeIndex = strokeIndexList.back();
-
-		// remove lines of last stroke 
-		while( linesList.size() > strokeIndex ){
-			delete linesList.back();
-			linesList.pop_back();
-		}
-
-		// remove stroke index
 		strokeIndexList.pop_back();
+		
+		if( strokeIndexList.size() > 0 ) 
+			strokeIndex = strokeIndexList.back();
 
-		// draw remining lines on top of last fbo texture
-		undoFbo.blitTo( fbo, undoFbo.getBounds(), fbo.getBounds() ); // start from last fbo texture
 		if( linesList.size() > 0 ){
-			for(deque<Line*>::size_type i=0; i != linesList.size(); i++)
-				drawLineToFbo( fbo, linesList[i] );
+			while( linesList.size() > strokeIndex ){
+				delete linesList.back();
+				linesList.pop_back();
+			}
 		}
-
 	}
+
+	// draw remining lines on top of last fbo texture
+	undoFbo.blitTo( fbo, undoFbo.getBounds(), fbo.getBounds() ); // start from last fbo texture
+	if( linesList.size() > 0 ){
+		for (std::deque<Line*>::iterator it = linesList.begin(); it!=linesList.end(); ++it)
+			drawLineToFbo( fbo, *it );
+	}else{
+		//undo line list empty, just update fbo texture
+		fbo.bindFramebuffer();
+		fbo.unbindFramebuffer();
+	}
+
 	//ci::app::console() << "undo steps: " << strokeIndexList.size() << ", lines: " << linesList.size() << std::endl;
 }
 

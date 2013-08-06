@@ -129,5 +129,9 @@
     <None Include="..\resources\canvas_texture.png">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\resources\icon_m.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\README.md" />
   </ItemGroup>
 </Project>

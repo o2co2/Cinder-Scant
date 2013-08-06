@@ -15,11 +15,11 @@ struct Config{
 	static const int WIDGET_COLOR = 0xFFFFFF;
 	static const int WIDGET_BORDER_WIDTH = 5;
 	static const int WIDGET_BORDER_COLOR = 0x444444;
-	static const int WIDGET_BORDER_OVER_COLOR = 0x666666;
+	static const int WIDGET_BORDER_OVER_COLOR = 0x555555;
 	static const int WIDGET_BORDER_DOWN_COLOR = 0x444444;
 	static const int WIDGET_FOCUS_COLOR = 0x888888;
 	static const int BUTTON_VALUE_COLOR = 0x888888;
-	static const int BUTTON_SIZE = 40;
+	static const int BUTTON_SIZE = 37;
 	static const int BUTTON_SPACE = 16;
 
 	static const int LABEL_COLOR = 0x666666;

@@ -10,6 +10,8 @@ namespace ui{
 		isDrag = false;
 		isDraggable = false;
 		isFocused = false;
+		isToggleable = false;
+		isSelected = false;
 
 		focusColor = ci::Color::hex( Config::WIDGET_FOCUS_COLOR );
 
@@ -31,6 +33,25 @@ namespace ui{
 	}
 	bool MouseWidget::getFocused(){
 		return isFocused;
+	}
+
+	void MouseWidget::setToggleable( bool value ){
+		isToggleable = value;
+		if(!isToggleable)
+			setSelected(false);
+	}
+	bool MouseWidget::getToggleable(){
+		return isToggleable;
+	}
+
+	void MouseWidget::setSelected( bool value ){
+		if(isToggleable)
+			isSelected = value;
+		else
+			isSelected = false;
+	}
+	bool MouseWidget::getSelected(){
+		return isSelected;
 	}
 
 	void MouseWidget::onMouseDown( ci::app::MouseEvent &event ){
@@ -56,6 +77,8 @@ namespace ui{
 			//ci::app::console() << "MouseWidget::mouseUp" << std::endl;
 			if( isOver ){
 				//ci::app::console() << "MouseWidget release" << std::endl;
+				if(isToggleable)
+					isSelected = !isSelected;
 				releaseSignal( this );
 			}
 			if( isDrag ){

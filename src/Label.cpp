@@ -9,10 +9,9 @@ namespace ui{
 
 	void Label::draw(){
 		ci::gl::enableAlphaBlending();
-		ci::gl::color( ci::ColorA( color, getAlpha() ) );
+		ci::gl::color( color );
 		ci::gl::pushModelView(); 
 		ci::gl::translate( getPosition() );
-		ci::gl::rotate( getRotation() );
 		ci::gl::translate( -size.x*1.5f, -size.y/2 );
 		font->drawString( text, size );
 		ci::gl::popModelView();

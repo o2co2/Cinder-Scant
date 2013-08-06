@@ -28,35 +28,19 @@ namespace ui{
 			void setPosition(float x, float y);
 			ci::Vec2f getPosition();
 
-			void setScale(float s);
-			float getScale();
-
-			void setRotation(float r);
-			float getRotation();
-
-			void setAlpha(float a);
-			float getAlpha();
-
 			void setColor(ci::Color c);
 			void setColor(float r, float g, float b);
 			ci::Color getColor();
-
-			void setName(std::string n);
-			std::string getName();
 
 		protected:
 			ci::Rectf rect;
 			ci::Vec2f size;
 			ci::Vec2f pos;
-			float scale;
-			float rot;
-			float alpha;
 			ci::Color color;
 			ci::Color borderColor;
 			ci::Color borderOverColor;
 			ci::Color borderDownColor;
 			float borderWidth;
-			std::string name;
 			bool needsUpdate;
 	};
 

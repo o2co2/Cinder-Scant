@@ -37,7 +37,8 @@ class Canvas {
 		void setLineVariance(float value);
 		float getLineVariance();
 
-		//ci::gl::Texture getSnapshot();
+		void setLineBlendMode(LineBlendMode bm);
+		LineBlendMode getLineBlendMode();
 
 		void addLine( ci::Vec2f endPos );
 		void addLine( ci::Vec2f startPos, ci::Vec2f endPos );
@@ -57,6 +58,7 @@ class Canvas {
 		ci::Color lineColor;
 		float lineSize;
 		float lineVariance;
+		LineBlendMode lineBlendMode;
 
 		ci::Vec2f lastEndPos;
 		float pointRecordDelay;

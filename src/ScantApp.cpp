@@ -15,7 +15,7 @@
 #include "MouseWidget.h"
 #include "RoundButton.h"
 #include "Label.h"
-
+#include "Line.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -38,6 +38,7 @@ class ScantApp : public AppNative {
 		void onLineColorChange( Color color );
 		void onLineWidthChange( float value );
 		void onLineVarianceChange( float value );
+		void onBlendMultiplyButtonRelease();
 		void onClearButtonRelease();
 		void onSaveButtonRelease();
 		Vec2f calcCanvasSize();
@@ -86,6 +87,7 @@ void ScantApp::setup(){
 	toolbar->colorChangeSignal.connect( std::bind(&ScantApp::onLineColorChange, this, std::_1));
 	toolbar->lineWidthButton->valueChangeSignal.connect( std::bind( &ScantApp::onLineWidthChange, this, std::_1 ) );
 	toolbar->lineVarianceButton->valueChangeSignal.connect( std::bind( &ScantApp::onLineVarianceChange, this, std::_1 ) );
+	toolbar->blendMultiplyButton->releaseSignal.connect( std::bind( &ScantApp::onBlendMultiplyButtonRelease, this ) );
 	toolbar->clearButton->releaseSignal.connect( std::bind( &ScantApp::onClearButtonRelease, this ) );
 	toolbar->saveButton->releaseSignal.connect( std::bind( &ScantApp::onSaveButtonRelease, this ) );
 
@@ -158,7 +160,7 @@ void ScantApp::update(){
 		isClick = false;
 		if( canvas->getBounds().contains( mousePos )  ){
 			isDrawing = true;
-			canvas->saveUndo();
+			//canvas->saveUndo();
 			cursor.setMode( Cursor::BRUSH_DOWN );
 			canvas->addLine( mousePos, mousePos );
 		}
@@ -168,6 +170,7 @@ void ScantApp::update(){
 		isRelease = false;
 		isDrawing = false;
 		cursor.setMode( Cursor::BRUSH_UP );
+		canvas->saveUndo();
 	}
 
 	if(isDrawing && isDrag){
@@ -220,14 +223,23 @@ void ScantApp::onLineVarianceChange( float value ){
 	canvas->setLineVariance( variance );
 }
 
+void ScantApp::onBlendMultiplyButtonRelease(){
+	if( toolbar->blendMultiplyButton->getSelected() )
+		canvas->setLineBlendMode( LINE_BLEND_MULTIPLY );
+	else
+		canvas->setLineBlendMode( LINE_BLEND_NORMAL );
+}
+
 void ScantApp::onClearButtonRelease( ) {
 	canvas->clear();
 }
 
 void ScantApp::onSaveButtonRelease( ) {
 	Surface s = copyWindowSurface( canvas->getBounds() );
-	//Surface s( canvas->getSnapshot() );
-	fs::path pngPath = getSaveFilePath( getHomeDirectory() );
+	vector<string> ext = vector<string>();
+	ext.push_back("png");
+	//fs::path pngPath = getSaveFilePath( getHomeDirectory().string() + "scant.png" , ext );
+	fs::path pngPath = getSaveFilePath( "", ext );
 	if( !pngPath.empty() ) {
 		writeImage( pngPath, s, ImageTarget::Options(), "png" );
 	}

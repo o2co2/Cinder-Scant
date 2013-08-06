@@ -15,7 +15,7 @@ namespace ui{
 
 		if(isDown){
 			ci::gl::color( borderDownColor );
-		}else if(isFocused){
+		}else if(isFocused || isSelected){
 			ci::gl::color( focusColor );
 		}else if(isOver){
 			ci::gl::color(  borderOverColor );

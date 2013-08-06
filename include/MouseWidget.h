@@ -16,6 +16,12 @@ namespace ui{
 			void setFocused( bool value );
 			bool getFocused();
 
+			void setToggleable( bool value );
+			bool getToggleable();
+
+			void setSelected( bool value );
+			bool getSelected();
+
 			ci::signals::signal<void( MouseWidget* )> mouseDownSignal;
 			ci::signals::signal<void( MouseWidget*, ci::Vec2i )> dragSignal;
 			ci::signals::signal<void( MouseWidget* )> releaseSignal;
@@ -32,6 +38,8 @@ namespace ui{
 			bool isDrag;
 			bool isDraggable;
 			bool isFocused;
+			bool isToggleable;
+			bool isSelected;
 
 			ci::Vec2f mousePos;
 			ci::Vec2f clickPos;

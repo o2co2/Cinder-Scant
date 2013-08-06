@@ -7,6 +7,7 @@
 #include "RoundButton.h"
 #include "RoundIconButton.h"
 #include "RoundValueButton.h"
+#include "Line.h"
 
 class Toolbar{
 	public:
@@ -23,6 +24,7 @@ class Toolbar{
 
 		ui::RoundValueButton* lineWidthButton;
 		ui::RoundValueButton* lineVarianceButton;
+		ui::RoundIconButton* blendMultiplyButton;
 		ui::RoundIconButton* clearButton;
 		ui::RoundIconButton* saveButton;
 	private:
