@@ -1,7 +1,9 @@
 Cinder-Scant
 ==============
 
-Anemic sketching app built with Cinder C++ library (http://libcinder.org). Just for testing out the framework, c++ and opengl.
+Anemic sketching app prototype built with Cinder C++ library (http://libcinder.org). Just for testing out the framework, c++ and opengl.
+
+![Preview](https://raw.github.com/meigo/Cinder-Scant/master/preview.png)
 
 ### Features
 * Adjustable pen size
